@@ -1,0 +1,11 @@
+{
+  "name": "Jakkash Property Website",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "flask",
+      "command": "./venv/bin/python app.py"
+    }
+  ],
+  "ports": [5000]
+}

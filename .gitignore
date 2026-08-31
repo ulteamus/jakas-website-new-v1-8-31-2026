@@ -45,7 +45,10 @@ vercel-preview*.log
 .vercel.bak-stale/
 
 # IDE / agent tooling
-.cursor/
+# Ignore .cursor contents but keep the Cloud Agent environment config tracked.
+.cursor/*
+!.cursor/environment.json
+!.cursor/install.sh
 .codex/
 .agents/
 .vscode/
