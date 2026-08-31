@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment & secrets (keep .env.example)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Local databases & MySQL dev
+.mysql-data/
+.mysql84-*/
+data/*.db
+
+# Runtime user uploads (seed assets under api/static stay tracked for deploy)
+uploads/
+
+# Logs
+*.log
+flask_*.log
+vercel-deploy*.log
+vercel-preview*.log
+
+# Vercel
+.vercel
+.vercel.bak-stale/
+
+# IDE / agent tooling
+.cursor/
+.codex/
+.agents/
+.vscode/
+.idea/
+
+# Archives & build artifacts
+_ARCHIVE_nested_clone_july2026/
+graphify-out/
+*.zip
+*.pkl
+*.joblib
+
+# Script artifacts
+scripts/_last_*.json
+scripts/smoke_test_results.json
+scripts/_last_migration_report.json
+scripts/_last_verify_report.json

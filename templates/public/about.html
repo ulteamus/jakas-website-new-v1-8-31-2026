@@ -1,0 +1,129 @@
+{% extends "public/base.html" %}
+{% block title %}About Us - {{ company_name }}{% endblock %}
+{% block content %}
+<section class="about-hero jk-flow py-5">
+  <div class="container">
+    <article class="about-hero-card premium-hover-card reveal-on-scroll">
+      <p class="about-kicker mb-2">About {{ company_name }}</p>
+      <h1 class="about-hero-title">Trusted Property Guidance in Surat</h1>
+      <p class="about-hero-text mb-0">
+        {{ company_name }} helps buyers, sellers, and renters close clearer deals —
+        with verified listings, transparent advice, and end-to-end support.
+      </p>
+    </article>
+  </div>
+</section>
+
+<section class="container pb-5 jk-flow" id="leadership">
+  <h2 class="section-title section-title-center mb-4">Leadership</h2>
+  <div class="row g-4 leadership-row">
+    <div class="col-12 col-md-6">
+      <article class="leadership-card founder-card premium-hover-card reveal-on-scroll h-100">
+        <img
+          src="{{ url_for('static', filename='img/founder-photo.webp') }}"
+          alt="Kalpesh Chunawala - Founder of JAKKASH Property Consultancy"
+          class="founder-photo"
+        >
+        <p class="founder-label mb-1">Founder</p>
+        <h3 class="founder-name">Kalpesh Chunawala</h3>
+        <p class="founder-role mb-2">Founder · JAKKASH Property Consultancy</p>
+        <blockquote class="about-quote-card mb-3">
+          <p class="mb-0">"A property is not just a place to live; it is the foundation of dreams, security, and future generations."</p>
+        </blockquote>
+        <p class="mb-0 text-muted">
+          Built JAKKASH into a client-first consultancy known for honest pricing and reliable site visits across Surat.
+          His focus on verified inventory and clear communication has helped families close homes with confidence.
+        </p>
+      </article>
+    </div>
+    <div class="col-12 col-md-6">
+      <article class="leadership-card founder-card premium-hover-card reveal-on-scroll h-100">
+        <img
+          src="{{ url_for('static', filename='img/company-logo-mark.webp') }}"
+          alt="Co-Founder - JAKKASH Property Consultancy"
+          class="founder-photo"
+        >
+        <p class="founder-label mb-1">Co-Founder</p>
+        <h3 class="founder-name">JAKKASH Leadership</h3>
+        <p class="founder-role mb-2">Co-Founder · Operations &amp; Client Success</p>
+        <blockquote class="about-quote-card mb-3">
+          <p class="mb-0">"Great brokerage is measured by trust delivered after the handshake."</p>
+        </blockquote>
+        <p class="mb-0 text-muted">
+          Strengthens day-to-day operations, listing quality, and client follow-through so every inquiry moves with speed.
+          Partners with the founder to keep rentals and sales pipelines transparent from first call to handover.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="container pb-5 jk-flow">
+  <div class="row g-4">
+    <div class="col-12">
+      <article class="about-info-card premium-hover-card reveal-on-scroll">
+        <div class="about-info-icon"><i class="bi bi-buildings"></i></div>
+        <div>
+          <h3>About Company</h3>
+          <p class="mb-0">
+            JAKKASH Property Consultancy simplifies buying, selling, and renting across Surat with verified listings and professional guidance.
+          </p>
+        </div>
+      </article>
+    </div>
+    <div class="col-md-6">
+      <article class="about-info-card premium-hover-card reveal-on-scroll h-100">
+        <div class="about-info-icon"><i class="bi bi-eye"></i></div>
+        <div>
+          <h3>Our Vision</h3>
+          <p class="mb-0">To be Surat's most trusted, customer-focused property consultancy.</p>
+        </div>
+      </article>
+    </div>
+    <div class="col-md-6">
+      <article class="about-info-card premium-hover-card reveal-on-scroll h-100">
+        <div class="about-info-icon"><i class="bi bi-bullseye"></i></div>
+        <div>
+          <h3>Our Mission</h3>
+          <p class="mb-0">Deliver transparent, reliable real-estate service that helps clients decide with confidence.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="about-stats-section py-5">
+  <div class="container">
+    <h2 class="section-title section-title-center">Our Growth in Numbers</h2>
+    <div class="row g-4">
+      <div class="col-6 col-lg-3">
+        <article class="about-stat-card premium-hover-card reveal-on-scroll h-100">
+          <p class="about-stat-value" data-counter="{{ about_stats.properties_listed }}" data-suffix="+">0</p>
+          <p class="about-stat-label mb-0">Properties Listed</p>
+        </article>
+      </div>
+      <div class="col-6 col-lg-3">
+        <article class="about-stat-card premium-hover-card reveal-on-scroll h-100">
+          <p class="about-stat-value" data-counter="{{ about_stats.happy_clients }}" data-suffix="+">0</p>
+          <p class="about-stat-label mb-0">Happy Clients</p>
+        </article>
+      </div>
+      <div class="col-6 col-lg-3">
+        <article class="about-stat-card premium-hover-card reveal-on-scroll h-100">
+          <p class="about-stat-value" data-counter="{{ about_stats.successful_deals }}" data-suffix="+">0</p>
+          <p class="about-stat-label mb-0">Successful Deals</p>
+        </article>
+      </div>
+      <div class="col-6 col-lg-3">
+        <article class="about-stat-card premium-hover-card reveal-on-scroll h-100">
+          <p class="about-stat-value" data-counter="{{ about_stats.years_experience }}" data-suffix="+">0</p>
+          <p class="about-stat-label mb-0">Years Experience</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/about.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "public/base.html" %}
+{% block title %}JAKKASH Property Assistant - {{ company_name }}{% endblock %}
+{% block content %}
+<section class="chatbot-page py-4 py-lg-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xl-10 col-xxl-9">
+        <header class="chatbot-page-header text-center mb-4 scroll-reveal">
+          <span class="chatbot-kicker">Jakkash Property Consultancy</span>
+          <h1 class="chatbot-page-title">JAKKASH Property Assistant</h1>
+          <p class="chatbot-page-lead text-muted mb-0">
+            Guided help for browsing listings, selling your property, contacting a broker, or reading FAQs. Tap an option to continue.
+          </p>
+        </header>
+
+        <div
+          class="chatbot-shell scroll-reveal"
+          data-phone="{{ company_phone_raw }}"
+          data-whatsapp="{{ company_whatsapp }}"
+          data-address="{{ company_address }}"
+        >
+          <div class="chatbot-header">
+            <div class="chatbot-header-avatar" aria-hidden="true">
+              <i class="bi bi-building"></i>
+            </div>
+            <div class="chatbot-header-copy">
+              <h2 class="chatbot-header-title mb-0">JAKKASH Property Assistant</h2>
+              <p class="chatbot-header-status mb-0">
+                <span class="chatbot-status-dot"></span> Online · Menu-guided Surat property help
+              </p>
+            </div>
+          </div>
+
+          <div id="chatMessages" class="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
+            <div class="chat-msg assistant chat-msg--visible">
+              <span class="chat-avatar chat-avatar--bot" aria-hidden="true"><i class="bi bi-building"></i></span>
+              <div class="bubble">
+                Welcome to <strong>JAKKASH Property Consultancy</strong>.<br><br>
+                Use the quick-select buttons below to browse properties, list a property for sale, speak with a broker, or read FAQs.
+              </div>
+            </div>
+          </div>
+
+          <form id="chatForm" class="chat-form">
+            <div class="chat-input-wrap">
+              <input
+                id="chatInput"
+                type="text"
+                class="form-control chat-input"
+                placeholder="Optional: type hello, contact, or address…"
+                autocomplete="off"
+                aria-label="Optional short keyword"
+              >
+            </div>
+            <button id="chatSendBtn" class="btn btn-jk-accent chat-send-btn" type="submit" aria-label="Send keyword">
+              <span class="chat-send-label">Send</span>
+              <i class="bi bi-send-fill chat-send-icon" aria-hidden="true"></i>
+            </button>
+          </form>
+
+          <div class="chat-suggestions">
+            <span class="chat-suggestions-label">Quick select</span>
+            <div id="chatMenu" class="chat-suggestions-list" role="group" aria-label="Assistant options">
+              <button type="button" class="chat-chip" data-action="browse">Browse Properties</button>
+              <button type="button" class="chat-chip" data-action="sell">Sell My Property</button>
+              <button type="button" class="chat-chip" data-action="broker">Speak to a Broker</button>
+              <button type="button" class="chat-chip" data-action="faq">Frequently Asked Questions</button>
+            </div>
+          </div>
+
+          <div id="chatPropertyResults" class="chat-property-results row g-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+{% endblock %}

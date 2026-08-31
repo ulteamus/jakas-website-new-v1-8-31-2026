@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JAKKASH — Customer Visit</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { font-family: Georgia, "Times New Roman", serif; color: #1f1f24; }
+    .brand { letter-spacing: 0.08em; font-weight: 700; color: #e67e22; }
+    .sheet { max-width: 860px; margin: 0 auto; border: 1px solid #ddd; padding: 2rem 2.25rem; }
+    .meta-table th { width: 220px; background: #faf7f4; }
+    .signature-row { display: flex; gap: 2rem; margin-top: 1.5rem; }
+    .signature-col { flex: 1 1 0; min-width: 0; }
+    .signature-line {
+      height: 60px;
+      border-bottom: 1px solid #333;
+      margin-top: 0.35rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+    .signature-line img { max-height: 56px; max-width: 100%; object-fit: contain; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff; }
+      .sheet { border: 0; padding: 0; }
+      .signature-row { page-break-inside: avoid; }
+    }
+    @media (max-width: 767.98px) {
+      .signature-row { flex-direction: column; gap: 1.25rem; }
+    }
+  </style>
+</head>
+<body class="p-4 bg-light">
+  <div class="sheet bg-white">
+    <div class="d-flex justify-content-between align-items-start mb-4 no-print">
+      <div>
+        <div class="brand">JAKKASH PROPERTY CONSULTANCY</div>
+        <div class="text-muted small">Customer Visit Record</div>
+      </div>
+      <button class="btn btn-dark btn-sm" onclick="window.print()">Print / Save PDF</button>
+    </div>
+    <header class="mb-4 border-bottom pb-3">
+      <div class="brand fs-4">JAKKASH PROPERTY CONSULTANCY</div>
+      <div class="text-muted">Surat · Brokerage Site Visit Form</div>
+    </header>
+    <table class="table table-bordered meta-table">
+      <tr><th>Visit Date</th><td>{{ visit.visit_date }}</td></tr>
+      <tr><th>Client Name</th><td>{{ visit.client_name }}</td></tr>
+      <tr><th>Client Address</th><td>{{ visit.client_address }}</td></tr>
+      <tr><th>Client Contact</th><td>{{ visit.client_contact }}</td></tr>
+      <tr><th>Client Requirement</th><td>{{ visit.client_requirement }}</td></tr>
+      <tr><th>Executive Name</th><td>{{ visit.executive_name or '-' }}</td></tr>
+      <tr><th>Executive Address</th><td>{{ visit.executive_address or '-' }}</td></tr>
+      <tr><th>Executive Contact</th><td>{{ visit.executive_contact or '-' }}</td></tr>
+    </table>
+
+    <h6 class="mt-4 mb-2">Selected Properties</h6>
+    <table class="table table-bordered table-sm">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Area</th>
+          <th>Block / Unit</th>
+          <th>Price / Rent</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if visit.selected_properties %}
+          {% for p in visit.selected_properties %}
+          <tr>
+            <td>{{ p.property_name }}</td>
+            <td>{{ p.area_name or '-' }}</td>
+            <td>{% if p.block_wing or p.unit_number %}{{ p.block_wing or '' }}{% if p.block_wing and p.unit_number %} / {% endif %}{{ p.unit_number or '' }}{% else %}-{% endif %}</td>
+            <td>₹{{ "{:,.0f}".format(p.price or 0) }}{% if (p.listing_intent or p.listing_type) == 'rent' %}/mo{% endif %}</td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="4">{{ visit.property_names_display or visit.property_name or ('Property #' ~ visit.property_id) }}</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <div class="signature-row">
+      <div class="signature-col">
+        <strong>Customer Signature</strong>
+        <div class="signature-line">
+          {% if visit.customer_signature_data %}
+          <img src="{{ visit.customer_signature_data }}" alt="Customer Signature">
+          {% endif %}
+        </div>
+        <div class="small text-muted mt-1">{{ visit.customer_signature_label or 'Customer signature pending' }}</div>
+      </div>
+      <div class="signature-col">
+        <strong>Executive / Broker Signature</strong>
+        <div class="signature-line">
+          {% if visit.executive_signature_data %}
+          <img src="{{ visit.executive_signature_data }}" alt="Executive Signature">
+          {% endif %}
+        </div>
+        <div class="small text-muted mt-1">{{ visit.executive_signature_label or 'Executive signature pending' }}</div>
+      </div>
+    </div>
+    <footer class="mt-4 pt-3 border-top small text-muted">
+      Generated for internal brokerage use · JAKKASH Property Consultancy
+    </footer>
+  </div>
+</body>
+</html>

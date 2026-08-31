@@ -1,0 +1,239 @@
+{% extends "admin/base.html" %}
+{% block title %}Customer Visits{% endblock %}
+{% block page_heading %}Customer Visit Form{% endblock %}
+{% block page_subheading %}Capture visit records with linked properties and signature areas.{% endblock %}
+{% block content %}
+<section class="admin-section-card">
+  <div class="admin-section-heading">
+    <h5>Create Customer Visit Record</h5>
+  </div>
+  <form method="POST" class="row g-3" id="customerVisitForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="col-md-3">
+      <label>Visit Date *</label>
+      <input type="date" class="form-control" name="visit_date" required>
+    </div>
+    <div class="col-md-5">
+      <label>Client Name *</label>
+      <input class="form-control" name="client_name" required>
+    </div>
+    <div class="col-md-4">
+      <label>Client Contact *</label>
+      <input class="form-control" name="client_contact" required>
+    </div>
+    <div class="col-md-6">
+      <label>Client Address *</label>
+      <textarea class="form-control" name="client_address" rows="2" required></textarea>
+    </div>
+    <div class="col-md-6">
+      <label>Client Requirement *</label>
+      <textarea class="form-control" name="client_requirement" rows="2" required></textarea>
+    </div>
+    <div class="col-12">
+      <label>Visited Properties *</label>
+      <select class="form-select" id="visitPropertySelect">
+        <option value="">Add a property…</option>
+        {% for property in properties %}
+        <option value="{{ property.id }}">#{{ property.id }} - {{ property.property_name }} ({{ property.area_name }})</option>
+        {% endfor %}
+      </select>
+      <div id="visitPropertyTags" class="d-flex flex-wrap gap-2 mt-2" aria-live="polite"></div>
+      <div id="visitPropertyIds"></div>
+      <div class="form-text">Select one or more properties. Click X on a tag to remove it.</div>
+    </div>
+    <div class="col-md-4">
+      <label>Executive Name *</label>
+      <input class="form-control" name="executive_name" required>
+    </div>
+    <div class="col-md-4">
+      <label>Executive Contact *</label>
+      <input class="form-control" name="executive_contact" required>
+    </div>
+    <div class="col-md-4">
+      <label>Executive Address *</label>
+      <input class="form-control" name="executive_address" required>
+    </div>
+
+    <div class="col-md-6">
+      <label>Customer Signature Label</label>
+      <input class="form-control mb-2" name="customer_signature_label" placeholder="Signed by customer">
+      <canvas id="customerSignatureCanvas" class="signature-canvas border rounded w-100" height="130"></canvas>
+      <input type="hidden" name="customer_signature_data" id="customerSignatureData">
+      <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="clearCustomerSignature">Clear Customer Signature</button>
+    </div>
+    <div class="col-md-6">
+      <label>Executive Signature Label</label>
+      <input class="form-control mb-2" name="executive_signature_label" placeholder="Signed by executive">
+      <canvas id="executiveSignatureCanvas" class="signature-canvas border rounded w-100" height="130"></canvas>
+      <input type="hidden" name="executive_signature_data" id="executiveSignatureData">
+      <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="clearExecutiveSignature">Clear Executive Signature</button>
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-jk-accent">Save Customer Visit Form</button>
+    </div>
+  </form>
+</section>
+
+<section class="admin-section-card">
+  <div class="admin-section-heading">
+    <h5>Visit Records</h5>
+    <form method="GET" class="row g-2">
+      <div class="col-auto"><input type="date" class="form-control form-control-sm" name="start_date" value="{{ start_date }}"></div>
+      <div class="col-auto"><input type="date" class="form-control form-control-sm" name="end_date" value="{{ end_date }}"></div>
+      <div class="col-auto"><button class="btn btn-sm btn-outline-secondary">Filter by Date</button></div>
+      <div class="col-auto"><a class="btn btn-sm btn-outline-dark" href="{{ url_for('admin.customer_visits') }}">Clear</a></div>
+    </form>
+  </div>
+  <div class="admin-table-wrap table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Client</th>
+          <th>Properties</th>
+          <th>Executive</th>
+          <th>Requirement</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for visit in visits %}
+        <tr>
+          <td>{{ visit.visit_date }}</td>
+          <td>
+            <div class="fw-semibold">{{ visit.client_name }}</div>
+            <div class="small text-muted">{{ visit.client_contact }}</div>
+          </td>
+          <td>{{ visit.property_names_display or visit.property_name or ('Property #' ~ visit.property_id) }}</td>
+          <td>
+            <div>{{ visit.executive_name or '-' }}</div>
+            <div class="small text-muted">{{ visit.executive_contact or '-' }}</div>
+          </td>
+          <td>{{ visit.client_requirement or '-' }}</td>
+          <td class="text-nowrap">
+            <a class="btn btn-sm btn-outline-secondary" target="_blank" href="{{ url_for('admin.print_customer_visit', visit_id=visit.id) }}">Print</a>
+            <a class="btn btn-sm btn-outline-dark" href="{{ url_for('admin.customer_visit_pdf', visit_id=visit.id) }}">PDF</a>
+            <form method="POST" action="{{ url_for('admin.delete_customer_visit', visit_id=visit.id) }}" class="d-inline" onsubmit="return confirm('Delete this visit record?');">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" class="text-center text-muted py-4">No visit forms available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+  (function () {
+    const select = document.getElementById('visitPropertySelect');
+    const tags = document.getElementById('visitPropertyTags');
+    const idsHost = document.getElementById('visitPropertyIds');
+    const selected = new Map();
+
+    function render() {
+      tags.innerHTML = '';
+      idsHost.innerHTML = '';
+      selected.forEach((label, id) => {
+        const pill = document.createElement('span');
+        pill.className = 'badge text-bg-light border d-inline-flex align-items-center gap-2 px-2 py-2';
+        pill.innerHTML = `<span>${label}</span>`;
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'btn btn-sm btn-link text-danger p-0';
+        x.textContent = '×';
+        x.addEventListener('click', () => { selected.delete(id); render(); });
+        pill.appendChild(x);
+        tags.appendChild(pill);
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'property_ids';
+        hidden.value = id;
+        idsHost.appendChild(hidden);
+      });
+    }
+
+    select?.addEventListener('change', () => {
+      const id = select.value;
+      const label = select.options[select.selectedIndex]?.text || id;
+      if (id) selected.set(id, label);
+      select.value = '';
+      render();
+    });
+
+    document.getElementById('customerVisitForm')?.addEventListener('submit', (e) => {
+      if (!selected.size) {
+        e.preventDefault();
+        alert('Please select at least one property.');
+      }
+    });
+  })();
+
+  function setupSignaturePad(canvasId, outputId, clearButtonId) {
+    const canvas = document.getElementById(canvasId);
+    const output = document.getElementById(outputId);
+    const clearButton = document.getElementById(clearButtonId);
+    if (!canvas || !output || !clearButton) return;
+
+    canvas.width = canvas.offsetWidth;
+    const ctx = canvas.getContext("2d");
+    let drawing = false;
+
+    function getPos(event) {
+      const rect = canvas.getBoundingClientRect();
+      const source = event.touches ? event.touches[0] : event;
+      return {
+        x: source.clientX - rect.left,
+        y: source.clientY - rect.top,
+      };
+    }
+
+    function start(event) {
+      drawing = true;
+      const pos = getPos(event);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+      event.preventDefault();
+    }
+
+    function move(event) {
+      if (!drawing) return;
+      const pos = getPos(event);
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#1f1f24";
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      output.value = canvas.toDataURL("image/png");
+      event.preventDefault();
+    }
+
+    function end(event) {
+      drawing = false;
+      event.preventDefault();
+    }
+
+    canvas.addEventListener("mousedown", start);
+    canvas.addEventListener("mousemove", move);
+    canvas.addEventListener("mouseup", end);
+    canvas.addEventListener("mouseleave", end);
+    canvas.addEventListener("touchstart", start, { passive: false });
+    canvas.addEventListener("touchmove", move, { passive: false });
+    canvas.addEventListener("touchend", end);
+    clearButton.addEventListener("click", () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      output.value = "";
+    });
+  }
+
+  setupSignaturePad("customerSignatureCanvas", "customerSignatureData", "clearCustomerSignature");
+  setupSignaturePad("executiveSignatureCanvas", "executiveSignatureData", "clearExecutiveSignature");
+</script>
+{% endblock %}
