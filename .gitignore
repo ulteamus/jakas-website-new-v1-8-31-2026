@@ -29,7 +29,18 @@ env/
 # Local databases & MySQL dev
 .mysql-data/
 .mysql84-*/
-data/*.db
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node (if tooling added later)
+node_modules/
 
 # Runtime user uploads (seed assets under api/static stay tracked for deploy)
 uploads/
