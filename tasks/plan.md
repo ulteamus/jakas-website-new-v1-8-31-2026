@@ -30,12 +30,12 @@ Initialize a clean Git working copy at `D:\property-broker-chatbot`, standardize
 - [x] Task 6: Create `tasks/` planning artifacts (this file + `todo.md`)
 
 ### Checkpoint: Structure
-- [ ] Commit structure changes
-- [ ] Push to `origin/main`
+- [x] Commit structure changes (`73ffec0`)
+- [x] Push to `origin/main`
 
 ### Phase 3: Verify
-- [ ] Task 7: Confirm GitHub repo URL and default branch
-- [ ] Task 8: Document local setup path in `tasks/todo.md`
+- [x] Task 7: Confirm GitHub repo URL and default branch
+- [x] Task 8: Document local setup path in `tasks/todo.md`
 
 ## Risks and Mitigations
 

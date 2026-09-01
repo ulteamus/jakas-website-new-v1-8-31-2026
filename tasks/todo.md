@@ -82,13 +82,13 @@
 **Description:** Stage all changes, commit, and push to `main`.
 
 **Acceptance criteria:**
-- [ ] All intended files staged
-- [ ] Commit message describes structure/gitignore changes
-- [ ] `git push origin main` succeeds
+- [x] All intended files staged
+- [x] Commit message describes structure/gitignore changes
+- [x] `git push origin main` succeeds
 
 **Verification:**
-- [ ] `gh repo view` shows updated `pushed_at`
-- [ ] GitHub default branch is `main`
+- [x] `gh repo view` shows updated `pushed_at`
+- [x] GitHub default branch is `main`
 
 **Dependencies:** Tasks 3–4  
 **Estimated scope:** XS
@@ -97,6 +97,6 @@
 
 ## Checkpoint: Complete
 
-- [ ] Local repo at `D:\property-broker-chatbot` ready for development
-- [ ] Remote `main` up to date
-- [ ] Planning docs in `tasks/` committed
+- [x] Local repo at `D:\property-broker-chatbot` ready for development
+- [x] Remote `main` up to date
+- [x] Planning docs in `tasks/` committed
